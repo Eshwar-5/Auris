@@ -23,8 +23,12 @@ export default defineConfig({
         theme_color: '#090B10',
         background_color: '#090B10',
         display: 'standalone',
+        display_override: ['window-controls-overlay', 'standalone', 'minimal-ui'],
         start_url: '/',
         orientation: 'portrait',
+        categories: ['music', 'productivity', 'utilities'],
+        dir: 'ltr',
+        prefer_related_applications: false,
         icons: [
           {
             src: 'pwa-192x192.png',
