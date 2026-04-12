@@ -14,7 +14,40 @@ export default defineConfig({
         type: 'module',
         navigateFallbackAllowlist: [/^index.html$/]
       },
-      includeAssets: ['favicon.svg'],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,wav,mp3}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/auris-lime\.vercel\.app\/assets\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'auris-assets-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /.*\.(?:wav|mp3|flac)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'auris-audio-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          }
+        ]
+      },
+      includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'screenshot-mobile.png', 'screenshot-desktop.png'],
       manifest: {
         id: '/',
         name: 'Auris Audio',
@@ -29,6 +62,18 @@ export default defineConfig({
         categories: ['music', 'productivity', 'utilities'],
         dir: 'ltr',
         prefer_related_applications: false,
+        launch_handler: {
+          client_mode: ['navigate-existing', 'auto']
+        },
+        shortcuts: [
+          {
+            name: 'Start Experience',
+            short_name: 'Start',
+            description: 'Jump straight into the spatial audio engine',
+            url: '/?start=true',
+            icons: [{ src: 'pwa-192x192.png', sizes: '192x192' }]
+          }
+        ],
         icons: [
           {
             src: 'pwa-192x192.png',
