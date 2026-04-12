@@ -26,7 +26,7 @@ function Resize-Image($src, $dest, $w, $h) {
             Write-Host "Correctly Resized $src ($w x $h) -> $dest"
         }
         catch {
-            Write-Error "Failed to resize $src: $($_.Exception.Message)"
+            Write-Error "Failed to resize ${src}: $($_.Exception.Message)"
             if (Test-Path $tempDest) { Remove-Item $tempDest -Force }
         }
         finally {

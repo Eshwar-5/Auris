@@ -18,7 +18,7 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,wav,mp3}'],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/auris-lime\.vercel\.app\/assets\/.*/i,
+            urlPattern: /\/assets\/.*/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'auris-assets-cache',
