@@ -55,6 +55,8 @@ export default defineConfig({
         description: 'Immersive Spatial Audio and Room Simulation',
         theme_color: '#090B10',
         background_color: '#090B10',
+        lang: 'en',
+        scope: '/',
         display: 'standalone',
         display_override: ['window-controls-overlay', 'standalone', 'minimal-ui'],
         start_url: '/',
