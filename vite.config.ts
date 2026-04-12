@@ -16,6 +16,7 @@ export default defineConfig({
       },
       includeAssets: ['favicon.svg'],
       manifest: {
+        id: '/',
         name: 'Auris Audio',
         short_name: 'Auris',
         description: 'Immersive Spatial Audio and Room Simulation',
