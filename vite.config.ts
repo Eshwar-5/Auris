@@ -24,22 +24,41 @@ export default defineConfig({
         background_color: '#090B10',
         display: 'standalone',
         start_url: '/',
+        orientation: 'portrait',
         icons: [
           {
-            src: 'pwa-192x192.jpg',
+            src: 'pwa-192x192.png',
             sizes: '192x192',
-            type: 'image/jpeg'
+            type: 'image/png',
+            purpose: 'any'
           },
           {
-            src: 'pwa-512x512.jpg',
+            src: 'pwa-512x512.png',
             sizes: '512x512',
-            type: 'image/jpeg'
+            type: 'image/png',
+            purpose: 'any'
           },
           {
-            src: 'pwa-512x512.jpg',
+            src: 'pwa-512x512.png',
             sizes: '512x512',
-            type: 'image/jpeg',
-            purpose: 'any maskable'
+            type: 'image/png',
+            purpose: 'maskable'
+          }
+        ],
+        screenshots: [
+          {
+            src: 'screenshot-mobile.png',
+            sizes: '540x1170',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'Auris Mobile Dashboard'
+          },
+          {
+            src: 'screenshot-desktop.png',
+            sizes: '1280x800',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Auris Desktop Dashboard'
           }
         ]
       }
