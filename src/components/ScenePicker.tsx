@@ -255,6 +255,7 @@ export function ScenePicker() {
             className="btn-ghost"
             onClick={() => useUiStore.getState().setIsLibraryOpen(true)}
             style={{ padding: '6px 14px', fontSize: 11, fontWeight: 700 }}
+            aria-label="Open project library"
           >
             Library
           </button>

@@ -108,7 +108,7 @@ export function ElevationSlider() {
           style={{
             position: 'absolute',
             left: '50%',
-            bottom: `calc(${elPercent}% - 8px)`,
+            bottom: `calc(${elPercent}% - 10px)`,
             transform: 'translateX(-50%)',
             width: 20,
             height: 20,

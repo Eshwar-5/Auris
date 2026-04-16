@@ -101,8 +101,13 @@ export function ProjectLibrary() {
 
   const handleDeleteTrack = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    await deleteFromDB(id);
-    removeTrackFromStore(id);
+    try {
+      await deleteFromDB(id);
+      removeTrackFromStore(id);
+    } catch (err) {
+      console.error('[Auris] Failed to delete track:', err);
+      alert('Failed to delete track from library.');
+    }
   };
 
   if (!isLibraryOpen) return null;
