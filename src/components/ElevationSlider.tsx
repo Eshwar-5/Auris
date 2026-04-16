@@ -53,11 +53,12 @@ export function ElevationSlider() {
             position: 'absolute',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: 4,
+            width: 6,
             height: '100%',
             borderRadius: 999,
-            background: '#1E2D40',
+            background: 'var(--color-surface-recessed)',
             overflow: 'hidden',
+            boxShadow: 'inset 0 1px 4px rgba(0,0,0,0.4)'
           }}
         >
           {/* Fill */}
@@ -67,9 +68,9 @@ export function ElevationSlider() {
               bottom: 0,
               width: '100%',
               height: `${elPercent}%`,
-              background: '#00E5C8',
+              background: 'linear-gradient(to top, var(--color-primary), var(--color-secondary))',
               borderRadius: 999,
-              opacity: 0.7,
+              opacity: 0.8,
             }}
           />
         </div>
@@ -79,10 +80,11 @@ export function ElevationSlider() {
           style={{
             position: 'absolute',
             top: 0,
-            right: -2,
-            fontSize: 9,
-            color: '#64748B',
-            fontFamily: 'IBM Plex Mono',
+            right: -6,
+            fontSize: 10,
+            fontWeight: 700,
+            color: 'var(--color-text-dim)',
+            fontFamily: 'var(--font-mono)',
           }}
         >
           +90°
@@ -91,10 +93,11 @@ export function ElevationSlider() {
           style={{
             position: 'absolute',
             bottom: 0,
-            right: -2,
-            fontSize: 9,
-            color: '#64748B',
-            fontFamily: 'IBM Plex Mono',
+            right: -6,
+            fontSize: 10,
+            fontWeight: 700,
+            color: 'var(--color-text-dim)',
+            fontFamily: 'var(--font-mono)',
           }}
         >
           −90°
@@ -107,13 +110,14 @@ export function ElevationSlider() {
             left: '50%',
             bottom: `calc(${elPercent}% - 8px)`,
             transform: 'translateX(-50%)',
-            width: 16,
-            height: 16,
+            width: 20,
+            height: 20,
             borderRadius: '50%',
-            background: '#00E5C8',
+            background: 'var(--color-surface-high)',
+            border: '2px solid var(--color-primary)',
             boxShadow: isDragging
-              ? '0 0 20px rgba(0,229,200,0.9)'
-              : '0 0 10px rgba(0,229,200,0.5)',
+              ? '0 0 24px var(--color-primary-dim), 0 0 12px rgba(0,220,229,0.4)'
+              : '0 4px 12px rgba(0,0,0,0.5)',
             transition: isDragging ? 'none' : 'bottom 0.1s ease, box-shadow 0.15s',
             zIndex: 2,
           }}
@@ -150,7 +154,7 @@ export function ElevationSlider() {
       </div>
 
       {/* Value badge */}
-      <div className="value-badge" style={{ fontSize: 10 }}>
+      <div className="value-badge" style={{ fontSize: 11, fontWeight: 700 }}>
         {elevation > 0 ? '+' : ''}{elevation}°
       </div>
     </div>

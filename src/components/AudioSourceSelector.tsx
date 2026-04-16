@@ -8,7 +8,7 @@ import { useUiStore } from '@/store/uiSlice';
 import { useSceneStore } from '@/store/sceneSlice';
 import { getSceneById } from '@/scenes/presets';
 import { extractGenre, matchGenreToSceneId } from '@/utils/metadata';
-import { saveTrack, loadTrackFile, deleteTrack } from '@/utils/storage';
+import { saveTrack } from '@/utils/storage';
 import { useLibraryStore } from '@/store/librarySlice';
 
 export function AudioSourceSelector() {
@@ -16,6 +16,7 @@ export function AudioSourceSelector() {
   const setSourceType = useAudioStore((s) => s.setSourceType);
   const setIsPlaying = useAudioStore((s) => s.setIsPlaying);
   const isLoadingIR = useUiStore((s) => s.isLoadingIR);
+  const setIsLibraryOpen = useUiStore((s) => s.setIsLibraryOpen);
   
   const activeSceneId = useSceneStore((s) => s.activeSceneId);
   const setActiveScene = useSceneStore((s) => s.setActiveScene);
@@ -32,11 +33,7 @@ export function AudioSourceSelector() {
   const [fileName, setFileName] = useState<string>('');
   const [micError, setMicError] = useState<string>('');
   
-  const tracks = useLibraryStore((s) => s.tracks);
   const addTrackToStore = useLibraryStore((s) => s.addTrackToStore);
-  const removeTrackFromStore = useLibraryStore((s) => s.removeTrackFromStore);
-
-  const [isLibraryOpen, setIsLibraryOpen] = useState(false);
 
   const handleDemo = () => {
     setMicError('');
@@ -51,7 +48,7 @@ export function AudioSourceSelector() {
   };
 
   const handleLibraryClick = () => {
-    setIsLibraryOpen(!isLibraryOpen);
+    setIsLibraryOpen(true);
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,54 +131,6 @@ export function AudioSourceSelector() {
     }
   };
 
-  const playLibraryTrack = async (id: string, name: string) => {
-    setIsLibraryOpen(false);
-    const audioBlob = await loadTrackFile(id);
-    if (!audioBlob) {
-      console.error('[Auris] Failed to load track blob from DB');
-      return;
-    }
-    // We treat the Blob as a File for engine purposes
-    const asFile = new File([audioBlob], name);
-    setFileName(name);
-    try {
-      await AudioEngine.instance.loadFile(asFile);
-      setSourceType('file');
-      setIsPlaying(true);
-      // Wait, we should also auto-genre detect it!
-      const g = await extractGenre(asFile);
-      if (g) {
-        const sId = matchGenreToSceneId(g);
-        if (sId !== activeSceneId) {
-          const scene = getSceneById(sId);
-          if (scene) {
-             setIsTransitioning(true);
-             setActiveScene(scene.id);
-             setAzimuth(scene.azimuth);
-             setElevation(scene.elevation);
-             setDistance(scene.distance);
-             setRoomSize(scene.roomSize);
-             setDamping(scene.damping);
-             setWetDry(scene.wetDry);
-             const engine = AudioEngine.instance;
-             engine.setAzimuthElevation(scene.azimuth, scene.elevation, scene.distance);
-             engine.setWetDry(scene.wetDry);
-             engine.setCurrentIRParams(scene.irParams);
-             setTimeout(() => setIsTransitioning(false), 450);
-          }
-        }
-      }
-    } catch (e) {
-      console.error('[Auris] Failed to play library track', e);
-    }
-  };
-
-  const handleLibraryDelete = async (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-    await deleteTrack(id);
-    removeTrackFromStore(id);
-  };
-
   const tabs = [
     { id: 'demo', label: 'Demo', icon: '♪', action: handleDemo },
     { id: 'library', label: 'Library', icon: '☰', action: handleLibraryClick },
@@ -218,89 +167,18 @@ export function AudioSourceSelector() {
         ))}
       </div>
 
-      {/* Library Popover */}
-      {isLibraryOpen && (
-        <div style={{
-          position: 'absolute',
-          bottom: '100%',
-          left: '70px',
-          marginBottom: '12px',
-          width: '320px',
-          maxHeight: '300px',
-          background: 'rgba(15, 23, 42, 0.95)',
-          backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          borderRadius: '12px',
-          padding: '12px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '8px',
-          overflowY: 'auto',
-          boxShadow: '0 10px 40px -10px rgba(0,0,0,0.8)'
-        }}>
-          <h3 style={{ fontSize: 11, fontWeight: 600, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>
-            Local Library
-          </h3>
-          {tracks.length === 0 ? (
-            <div style={{ fontSize: 11, color: '#64748B', padding: '12px 0', textAlign: 'center' }}>
-              No songs stored yet. Upload a song to save it here!
-            </div>
-          ) : (
-            tracks.map(t => (
-              <div 
-                key={t.id} 
-                onClick={() => playLibraryTrack(t.id, t.filename)}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '8px 12px', background: 'rgba(255,255,255,0.03)',
-                  borderRadius: '6px', cursor: 'pointer',
-                  border: '1px solid transparent',
-                  transition: 'all 0.2s',
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
-                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}
-              >
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', overflow: 'hidden' }}>
-                  <span style={{ fontSize: 13, color: '#F8FAFC', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                    {t.title}
-                  </span>
-                  <span style={{ fontSize: 10, color: '#64748B' }}>
-                    {t.genre ? `${t.genre} • ` : ''}{new Date(t.uploadedAt).toLocaleDateString()}
-                  </span>
-                </div>
-                <button 
-                  onClick={(e) => handleLibraryDelete(e, t.id)}
-                  style={{
-                    background: 'transparent',
-                    border: 'none',
-                    color: '#EF4444',
-                    cursor: 'pointer',
-                    opacity: 0.6,
-                    padding: 4
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
-                  onMouseLeave={(e) => e.currentTarget.style.opacity = '0.6'}
-                  title="Delete from Library"
-                >
-                  ✕
-                </button>
-              </div>
-            ))
-          )}
-        </div>
-      )}
-
       {/* File name or error */}
       {sourceType === 'file' && fileName && (
         <span
           style={{
-            fontFamily: 'IBM Plex Mono',
-            fontSize: 10,
-            color: '#64748B',
-            maxWidth: 120,
+            fontFamily: 'var(--font-mono)',
+            fontSize: 11,
+            color: 'var(--color-primary)',
+            maxWidth: 160,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
+            fontWeight: 500,
           }}
           title={fileName}
         >

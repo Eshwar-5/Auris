@@ -35,7 +35,7 @@ function PhysicsSlider({ label, value, min = 0, max = 100, unit = '%', onChange,
         onChange={(e) => onChange(Number(e.target.value))}
         className={violet ? 'violet-thumb' : ''}
         style={{
-          '--track-fill': violet ? '#8B5CF6' : '#00E5C8',
+          '--track-fill': violet ? 'var(--color-secondary)' : 'var(--color-primary)',
           '--track-pct': `${pct}%`,
         } as React.CSSProperties}
         aria-label={label}
@@ -85,11 +85,12 @@ export function RoomPhysics() {
         />
         <h2
           style={{
-            fontFamily: 'Syne',
-            fontSize: 13,
-            fontWeight: 600,
-            color: '#F1F5F9',
-            letterSpacing: '0.05em',
+            fontFamily: 'var(--font-display)',
+            fontSize: 14,
+            fontWeight: 800,
+            color: 'var(--color-text)',
+            letterSpacing: '0.02em',
+            textTransform: 'uppercase'
           }}
         >
           Room Physics
@@ -101,8 +102,8 @@ export function RoomPhysics() {
         className="glass"
         style={{
           padding: 16,
-          background: 'rgba(139,92,246,0.04)',
-          borderColor: 'rgba(139,92,246,0.15)',
+          background: 'var(--color-surface-recessed)',
+          border: 'none',
         }}
       >
         <div className="section-label">Material Response</div>
@@ -122,9 +123,11 @@ export function RoomPhysics() {
                   flex: 1,
                   height: Math.max(4, height),
                   borderRadius: 2,
-                  background: `rgba(139,92,246,${0.3 + (height / 32) * 0.6})`,
+                  background: `linear-gradient(to top, var(--color-secondary) ${10 + (height/32) * 90}%, transparent)`,
                   transition: 'height 0.3s ease',
                   alignSelf: 'flex-end',
+                  opacity: 0.2 + (height / 32) * 0.8,
+                  boxShadow: height > 24 ? '0 0 12px var(--color-secondary-dim)' : 'none'
                 }}
               />
             );
@@ -132,10 +135,10 @@ export function RoomPhysics() {
         </div>
         <div
           style={{
-            marginTop: 6,
-            fontFamily: 'IBM Plex Mono',
+            marginTop: 8,
+            fontFamily: 'var(--font-mono)',
             fontSize: 9,
-            color: '#64748B',
+            color: 'var(--color-text-dim)',
             display: 'flex',
             justifyContent: 'space-between',
           }}
@@ -171,12 +174,12 @@ export function RoomPhysics() {
       {/* RT60 estimate */}
       <div
         className="glass"
-        style={{ padding: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+        style={{ padding: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--color-surface-recessed)' }}
       >
-        <span style={{ fontFamily: 'IBM Plex Mono', fontSize: 11, color: '#64748B' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--color-text-muted)', fontWeight: 600 }}>
           Est. RT60
         </span>
-        <span className="value-badge violet" style={{ fontSize: 11 }}>
+        <span className="value-badge violet" style={{ fontSize: 12, fontWeight: 700 }}>
           {((roomSize / 100) * 4.5 * (1 - damping / 150)).toFixed(2)}s
         </span>
       </div>
@@ -186,7 +189,7 @@ export function RoomPhysics() {
         <div className="section-label">Reflection Timing</div>
         <div
           className="glass"
-          style={{ padding: 12, display: 'flex', alignItems: 'center', gap: 8 }}
+          style={{ padding: 16, display: 'flex', alignItems: 'center', gap: 12, background: 'var(--color-surface-recessed)' }}
         >
           <div
             style={{
@@ -211,15 +214,16 @@ export function RoomPhysics() {
                     width: 3,
                     height: h,
                     background: i === 0
-                      ? '#8B5CF6'
-                      : `rgba(139,92,246,${0.6 - i * 0.08})`,
+                      ? 'var(--color-secondary)'
+                      : 'var(--color-secondary-dim)',
                     borderRadius: 2,
+                    opacity: 1 - i * 0.15
                   }}
                 />
               );
             })}
           </div>
-          <span style={{ fontFamily: 'IBM Plex Mono', fontSize: 9, color: '#64748B', minWidth: 32 }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--color-text-dim)', fontWeight: 600, minWidth: 40 }}>
             80ms
           </span>
         </div>

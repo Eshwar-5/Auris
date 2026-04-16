@@ -22,6 +22,7 @@ import { RoomPhysics } from '@/components/RoomPhysics';
 import { ScenePicker } from '@/components/ScenePicker';
 import { WaveformVisualizer } from '@/components/WaveformVisualizer';
 import { AudioSourceSelector } from '@/components/AudioSourceSelector';
+import { ProjectLibrary } from '@/components/ProjectLibrary';
 
 // ─── INSTALL INSTRUCTIONS MODAL ──────────────────────────────────────────────
 function InstallInstructionsModal() {
@@ -53,13 +54,14 @@ function InstallInstructionsModal() {
         animate={{ scale: 1, opacity: 1 }}
         onClick={(e) => e.stopPropagation()}
         style={{
-          backgroundColor: '#0F172A',
-          border: '1px solid rgba(255,255,255,0.1)',
-          borderRadius: 16,
+          backgroundColor: 'var(--color-bg-deep)',
+          border: 'none',
+          borderRadius: 'var(--radius-lg)',
           padding: 32,
           maxWidth: 400,
           width: '100%',
-          textAlign: 'center'
+          textAlign: 'center',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.5)'
         }}
       >
         <h3 style={{ color: '#00E5C8', fontSize: 20, marginBottom: 16, fontFamily: 'Syne' }}>
@@ -123,7 +125,7 @@ function SplashScreen({ onBegin }: { onBegin: () => void }) {
       style={{
         position: 'fixed',
         inset: 0,
-        background: '#090B10',
+        background: 'var(--color-bg-deep)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -210,10 +212,10 @@ function SplashScreen({ onBegin }: { onBegin: () => void }) {
         {/* Title */}
         <h1
           style={{
-            fontFamily: 'Syne',
+            fontFamily: 'var(--font-display)',
             fontSize: 'clamp(56px, 10vw, 80px)',
             fontWeight: 800,
-            color: '#F1F5F9',
+            color: 'var(--color-text)',
             letterSpacing: '-0.02em',
             lineHeight: 1,
             marginBottom: 12,
@@ -299,10 +301,10 @@ function SplashScreen({ onBegin }: { onBegin: () => void }) {
                 fontSize: 14,
                 fontFamily: 'IBM Plex Mono',
                 fontWeight: 500,
-                color: '#94A3B8',
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: 8,
+                color: 'var(--color-text-muted)',
+                background: 'var(--color-surface)',
+                border: 'none',
+                borderRadius: 'var(--radius-md)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -386,13 +388,13 @@ function BottomBar() {
         aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
       >
         {isPlaying ? (
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="#090B10">
-            <rect x="4" y="3" width="4" height="12" rx="1" />
-            <rect x="10" y="3" width="4" height="12" rx="1" />
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--color-bg-deep)">
+            <rect x="6" y="5" width="4" height="14" rx="2" />
+            <rect x="14" y="5" width="4" height="14" rx="2" />
           </svg>
         ) : (
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="#090B10">
-            <path d="M5 3L15 9L5 15V3Z" />
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--color-bg-deep)">
+            <path d="M7 5L19 12L7 19V5Z" />
           </svg>
         )}
       </button>
@@ -401,7 +403,7 @@ function BottomBar() {
       <AudioSourceSelector />
 
       {/* Divider */}
-      <div style={{ width: 1, height: 32, background: '#1E2D40', flexShrink: 0 }} />
+      <div style={{ width: 1, height: 32, background: 'var(--color-text-dim)', flexShrink: 0, opacity: 0.2 }} />
 
       {/* Waveform */}
       <div style={{ flex: 1, minWidth: 80, maxWidth: 360 }}>
@@ -409,7 +411,7 @@ function BottomBar() {
       </div>
 
       {/* Divider */}
-      <div style={{ width: 1, height: 32, background: '#1E2D40', flexShrink: 0 }} />
+      <div style={{ width: 1, height: 32, background: 'var(--color-text-dim)', flexShrink: 0, opacity: 0.2 }} />
 
       {/* Progressive enhancement toggles */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
@@ -436,8 +438,8 @@ function BottomBar() {
                 onChange={(e) => setHapticIntensity(Number(e.target.value))}
                 aria-label="Haptic intensity"
                 style={{
-                  width: 60,
-                  '--track-fill': '#00E5C8',
+                  width: 80,
+                  '--track-fill': 'var(--color-primary)',
                   '--track-pct': `${hapticIntensity}%`,
                 } as React.CSSProperties}
               />
@@ -647,6 +649,7 @@ export default function App() {
     <>
       <AnimatePresence>
         {!isInitialized && <SplashScreen onBegin={handleBegin} />}
+        <ProjectLibrary />
       </AnimatePresence>
 
       {isInitialized && (
@@ -659,8 +662,7 @@ export default function App() {
           {/* Scene picker at top of center/left */}
           <div
             style={{
-              padding: '12px 16px 0',
-              borderBottom: '1px solid #1E2D40',
+              padding: '16px 24px',
               flexShrink: 0,
             }}
           >

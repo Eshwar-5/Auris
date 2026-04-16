@@ -36,15 +36,14 @@ function SceneCard({ scene, isActive, onSelect }: SceneCardProps) {
     >
       <div
         style={{
-          borderRadius: 12,
+          borderRadius: 'var(--radius-md)',
           overflow: 'hidden',
-          border: isActive
-            ? '1.5px solid #00E5C8'
-            : '1.5px solid rgba(30,45,64,0.8)',
-          transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+          border: 'none',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          background: isActive ? 'var(--color-bg)' : 'var(--color-bg-deep)',
           boxShadow: isActive
-            ? '0 0 20px rgba(0,229,200,0.25), 0 0 40px rgba(0,229,200,0.08)'
-            : 'none',
+            ? '0 0 32px var(--color-primary-dim), 0 0 12px rgba(0,220,229,0.3)'
+            : '0 4px 12px rgba(0,0,0,0.3)',
         }}
       >
         {/* Gradient thumbnail */}
@@ -67,10 +66,10 @@ function SceneCard({ scene, isActive, onSelect }: SceneCardProps) {
                   width: 40,
                   height: 40,
                   borderRadius: '50%',
-                  background: 'rgba(0,229,200,0.15)',
+                  background: 'var(--color-primary-dim)',
                   top: -10,
                   right: -10,
-                  filter: 'blur(8px)',
+                  filter: 'blur(12px)',
                 }}
                 className="animate-orb"
               />
@@ -95,13 +94,13 @@ function SceneCard({ scene, isActive, onSelect }: SceneCardProps) {
             <div
               style={{
                 position: 'absolute',
-                top: 6,
-                right: 6,
+                top: 8,
+                right: 8,
                 width: 6,
                 height: 6,
                 borderRadius: '50%',
-                background: '#00E5C8',
-                boxShadow: '0 0 8px rgba(0,229,200,0.9)',
+                background: 'var(--color-primary)',
+                boxShadow: '0 0 12px var(--color-primary)',
               }}
               className="animate-pulse-slow"
             />
@@ -111,18 +110,17 @@ function SceneCard({ scene, isActive, onSelect }: SceneCardProps) {
         {/* Info */}
         <div
           style={{
-            padding: '8px 10px',
-            background: isActive ? 'rgba(0,229,200,0.04)' : 'rgba(13,17,26,0.95)',
+            padding: '12px',
             textAlign: 'left',
           }}
         >
           <div
             style={{
-              fontFamily: 'Syne',
-              fontSize: 11,
-              fontWeight: 600,
-              color: isActive ? '#00E5C8' : '#F1F5F9',
-              marginBottom: 2,
+              fontFamily: 'var(--font-display)',
+              fontSize: 12,
+              fontWeight: 800,
+              color: isActive ? 'var(--color-primary)' : 'var(--color-text)',
+              marginBottom: 4,
               transition: 'color 0.2s',
             }}
           >
@@ -130,10 +128,10 @@ function SceneCard({ scene, isActive, onSelect }: SceneCardProps) {
           </div>
           <div
             style={{
-              fontFamily: 'IBM Plex Mono',
-              fontSize: 9,
-              color: '#64748B',
-              lineHeight: 1.3,
+              fontFamily: 'var(--font-mono)',
+              fontSize: 10,
+              color: 'var(--color-text-dim)',
+              lineHeight: 1.4,
             }}
           >
             {scene.tagline}
@@ -252,14 +250,23 @@ export function ScenePicker() {
         }}
       >
         <span className="section-label" style={{ marginBottom: 0 }}>Scenes</span>
-        <button
-          className="btn-ghost"
-          onClick={handleSaveCustom}
-          aria-label="Save current settings as custom scene"
-          style={{ padding: '4px 10px', fontSize: 11 }}
-        >
-          + Save
-        </button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            className="btn-ghost"
+            onClick={() => useUiStore.getState().setIsLibraryOpen(true)}
+            style={{ padding: '6px 14px', fontSize: 11, fontWeight: 700 }}
+          >
+            Library
+          </button>
+          <button
+            className="btn-ghost"
+            onClick={handleSaveCustom}
+            aria-label="Save current settings as custom scene"
+            style={{ padding: '6px 14px', fontSize: 11, fontWeight: 700 }}
+          >
+            + Save Preset
+          </button>
+        </div>
       </div>
 
       {/* Scroll container */}

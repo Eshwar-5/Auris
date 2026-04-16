@@ -36,7 +36,7 @@ function SliderRow({ label, value, min, max, step = 1, unit, onChange }: SliderR
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         style={{
-          '--track-fill': '#00E5C8',
+          '--track-fill': 'var(--color-primary)',
           '--track-pct': `${pct}%`,
         } as React.CSSProperties}
         aria-label={label}
@@ -100,11 +100,12 @@ export function ControlPanel() {
         />
         <h2
           style={{
-            fontFamily: 'Syne',
-            fontSize: 13,
-            fontWeight: 600,
-            color: '#F1F5F9',
-            letterSpacing: '0.05em',
+            fontFamily: 'var(--font-display)',
+            fontSize: 14,
+            fontWeight: 800,
+            color: 'var(--color-text)',
+            letterSpacing: '0.02em',
+            textTransform: 'uppercase'
           }}
         >
           Source Position
@@ -134,10 +135,10 @@ export function ControlPanel() {
             }}
           />
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: '#F1F5F9', fontFamily: 'Syne' }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--color-text)', fontFamily: 'var(--font-display)' }}>
               {activeScene.name}
             </div>
-            <div style={{ fontSize: 10, color: '#64748B', fontFamily: 'IBM Plex Mono' }}>
+            <div style={{ fontSize: 11, color: 'var(--color-text-muted)', fontFamily: 'var(--font-body)' }}>
               {activeScene.description}
             </div>
           </div>
@@ -151,30 +152,32 @@ export function ControlPanel() {
           {/* Mini compass */}
           <div
             style={{
-              width: 48,
-              height: 48,
+              width: 56,
+              height: 56,
               borderRadius: '50%',
-              border: '1px solid #1E2D40',
+              background: 'var(--color-surface-recessed)',
               position: 'relative',
               flexShrink: 0,
+              boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.4)'
             }}
           >
             {/* Cardinal points */}
             {['N', 'E', 'S', 'W'].map((dir, i) => {
               const positions = [
-                { top: 1, left: '50%', transform: 'translateX(-50%)' },
-                { right: 2, top: '50%', transform: 'translateY(-50%)' },
-                { bottom: 1, left: '50%', transform: 'translateX(-50%)' },
-                { left: 2, top: '50%', transform: 'translateY(-50%)' },
+                { top: 4, left: '50%', transform: 'translateX(-50%)' },
+                { right: 6, top: '50%', transform: 'translateY(-50%)' },
+                { bottom: 4, left: '50%', transform: 'translateX(-50%)' },
+                { left: 6, top: '50%', transform: 'translateY(-50%)' },
               ];
               return (
                 <span
                   key={dir}
                   style={{
                     position: 'absolute',
-                    fontSize: 7,
-                    color: '#64748B',
-                    fontFamily: 'IBM Plex Mono',
+                    fontSize: 8,
+                    fontWeight: 700,
+                    color: 'var(--color-text-dim)',
+                    fontFamily: 'var(--font-mono)',
                     lineHeight: 1,
                     ...positions[i],
                   }}
@@ -190,13 +193,13 @@ export function ControlPanel() {
                 top: '50%',
                 left: '50%',
                 width: 2,
-                height: 18,
-                background: '#00E5C8',
+                height: 22,
+                background: 'linear-gradient(to top, var(--color-primary), var(--color-secondary))',
                 borderRadius: 1,
                 transformOrigin: 'bottom center',
                 transform: `translate(-50%, -100%) rotate(${azimuth}deg)`,
                 transition: 'transform 0.05s linear',
-                boxShadow: '0 0 6px rgba(0,229,200,0.7)',
+                boxShadow: '0 0 10px var(--color-primary-dim)',
               }}
             />
             {/* Center dot */}
@@ -205,11 +208,11 @@ export function ControlPanel() {
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
-                width: 6,
-                height: 6,
+                width: 8,
+                height: 8,
                 borderRadius: '50%',
-                background: '#090B10',
-                border: '1px solid #00E5C8',
+                background: 'var(--color-bg-deep)',
+                border: '1px solid var(--color-primary)',
                 transform: 'translate(-50%,-50%)',
               }}
             />
@@ -250,16 +253,17 @@ export function ControlPanel() {
       <div
         className="glass"
         style={{
-          padding: 12,
-          fontFamily: 'IBM Plex Mono',
-          fontSize: 10,
-          color: '#64748B',
+          padding: 16,
+          fontFamily: 'var(--font-mono)',
+          fontSize: 11,
+          color: 'var(--color-text-muted)',
           lineHeight: 1.8,
+          background: 'var(--color-surface-recessed)'
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>az / el / dist</span>
-          <span style={{ color: '#00E5C8' }}>
+          <span style={{ color: 'var(--color-primary)', fontWeight: 600 }}>
             {Math.round(azimuth)}° / {elevation > 0 ? '+' : ''}{elevation}° / {distance.toFixed(1)}m
           </span>
         </div>

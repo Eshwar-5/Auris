@@ -13,6 +13,7 @@ interface UiState {
   deferredPrompt: any | null; // BeforeInstallPromptEvent
   isInstallable: boolean;
   showInstallInstructions: boolean;
+  isLibraryOpen: boolean;
 
   setIsInitialized: (v: boolean) => void;
   setIsLoadingIR: (v: boolean) => void;
@@ -25,6 +26,7 @@ interface UiState {
   setDeferredPrompt: (v: any | null) => void;
   setIsInstallable: (v: boolean) => void;
   setShowInstallInstructions: (v: boolean) => void;
+  setIsLibraryOpen: (v: boolean) => void;
 }
 
 export const useUiStore = create<UiState>((set) => ({
@@ -39,6 +41,7 @@ export const useUiStore = create<UiState>((set) => ({
   deferredPrompt: null,
   isInstallable: false,
   showInstallInstructions: false,
+  isLibraryOpen: false,
 
   setIsInitialized: (v) => set({ isInitialized: v }),
   setIsLoadingIR: (v) => set({ isLoadingIR: v }),
@@ -51,4 +54,5 @@ export const useUiStore = create<UiState>((set) => ({
   setDeferredPrompt: (v) => set({ deferredPrompt: v }),
   setIsInstallable: (v) => set({ isInstallable: v }),
   setShowInstallInstructions: (v) => set({ showInstallInstructions: v }),
+  setIsLibraryOpen: (v) => set({ isLibraryOpen: v }),
 }));

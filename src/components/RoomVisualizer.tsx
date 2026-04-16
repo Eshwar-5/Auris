@@ -29,7 +29,7 @@ function drawScene(
   ctx.clearRect(0, 0, w * dpr, h * dpr);
 
   // --- BACKGROUND ---
-  ctx.fillStyle = '#090B10';
+  ctx.fillStyle = '#0A0A0B'; // var(--color-bg-deep)
   ctx.fillRect(0, 0, w, h);
 
   // Beat-reactive glow from center
@@ -37,8 +37,8 @@ function drawScene(
   if (fftData.length > 0) {
     const beatGlow = Math.min(avgAmplitude * 180, 120);
     const bgGrad = ctx.createRadialGradient(CENTER, CENTER, 0, CENTER, CENTER, MAX_RADIUS);
-    bgGrad.addColorStop(0, `rgba(0,229,200,${Math.min(avgAmplitude * 0.08, 0.06)})`);
-    bgGrad.addColorStop(0.5, `rgba(139,92,246,${Math.min(avgAmplitude * 0.04, 0.03)})`);
+    bgGrad.addColorStop(0, `rgba(0,220,229,${Math.min(avgAmplitude * 0.1, 0.08)})`);
+    bgGrad.addColorStop(0.5, `rgba(227,181,255,${Math.min(avgAmplitude * 0.06, 0.04)})`);
     bgGrad.addColorStop(1, 'transparent');
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, w, h);
@@ -46,7 +46,7 @@ function drawScene(
   }
 
   // --- ROOM RINGS ---
-  const ringColors = ['rgba(30,45,64,0.4)', 'rgba(30,45,64,0.25)', 'rgba(30,45,64,0.15)'];
+  const ringColors = ['rgba(91,91,94,0.3)', 'rgba(91,91,94,0.15)', 'rgba(91,91,94,0.08)'];
   [MAX_RADIUS, MAX_RADIUS * 0.67, MAX_RADIUS * 0.33].forEach((r, i) => {
     ctx.beginPath();
     ctx.arc(CENTER, CENTER, r, 0, Math.PI * 2);
@@ -62,7 +62,7 @@ function drawScene(
   });
 
   // --- CROSSHAIRS ---
-  ctx.strokeStyle = 'rgba(30,45,64,0.4)';
+  ctx.strokeStyle = 'rgba(91,91,94,0.2)';
   ctx.lineWidth = 0.75;
   ctx.setLineDash([4, 8]);
   ctx.beginPath();
@@ -80,10 +80,10 @@ function drawScene(
     { label: 'BACK', x: CENTER, y: CENTER + MAX_RADIUS + 20 },
     { label: 'LEFT', x: CENTER - MAX_RADIUS - 16, y: CENTER },
   ];
-  ctx.font = `500 9px "IBM Plex Mono"`;
+  ctx.font = `800 10px "Space Grotesk"`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = 'rgba(100,116,139,0.6)';
+  ctx.fillStyle = 'rgba(145,144,148,0.4)';
   cardinals.forEach(({ label, x, y }) => {
     ctx.fillText(label, x, y);
   });
@@ -95,7 +95,7 @@ function drawScene(
 
   // Source trail / shadow
   const trailGrad = ctx.createRadialGradient(srcX, srcY, 0, srcX, srcY, 60 + amplitude * 40);
-  trailGrad.addColorStop(0, 'rgba(0,229,200,0.12)');
+  trailGrad.addColorStop(0, 'rgba(0,220,229,0.15)');
   trailGrad.addColorStop(1, 'transparent');
   ctx.fillStyle = trailGrad;
   ctx.beginPath();
@@ -107,8 +107,8 @@ function drawScene(
   ctx.moveTo(CENTER, CENTER);
   ctx.lineTo(srcX, srcY);
   const lineGrad = ctx.createLinearGradient(CENTER, CENTER, srcX, srcY);
-  lineGrad.addColorStop(0, 'rgba(0,229,200,0.1)');
-  lineGrad.addColorStop(1, `rgba(0,229,200,${0.2 + amplitude * 0.3})`);
+  lineGrad.addColorStop(0, 'rgba(0,220,229,0.05)');
+  lineGrad.addColorStop(1, `rgba(0,220,229,${0.2 + amplitude * 0.3})`);
   ctx.strokeStyle = lineGrad;
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 6]);
@@ -122,29 +122,29 @@ function drawScene(
     const opacity = Math.max(0, (0.3 - ring * 0.1) * (1 + amplitude));
     ctx.beginPath();
     ctx.arc(srcX, srcY, ringR, 0, Math.PI * 2);
-    ctx.strokeStyle = `rgba(0,229,200,${opacity})`;
+    ctx.strokeStyle = `rgba(0,220,229,${opacity})`;
     ctx.lineWidth = 1 - ring * 0.2;
     ctx.stroke();
   }
 
   // Source node body
-  const nodeRadius = 9 + amplitude * 5;
+  const nodeRadius = 10 + amplitude * 6;
   const nodeGrad = ctx.createRadialGradient(srcX - 2, srcY - 2, 0, srcX, srcY, nodeRadius);
   nodeGrad.addColorStop(0, '#00FFF0');
-  nodeGrad.addColorStop(0.6, '#00E5C8');
-  nodeGrad.addColorStop(1, '#00B09B');
+  nodeGrad.addColorStop(0.5, '#00DCE5');
+  nodeGrad.addColorStop(1, '#E3B5FF');
   ctx.beginPath();
   ctx.arc(srcX, srcY, nodeRadius, 0, Math.PI * 2);
   ctx.fillStyle = nodeGrad;
-  ctx.shadowColor = '#00E5C8';
-  ctx.shadowBlur = isDragging ? 30 : 16;
+  ctx.shadowColor = 'rgba(0,220,229,0.5)';
+  ctx.shadowBlur = isDragging ? 40 : 20;
   ctx.fill();
   ctx.shadowBlur = 0;
 
   // Source inner dot
   ctx.beginPath();
   ctx.arc(srcX, srcY, 3, 0, Math.PI * 2);
-  ctx.fillStyle = '#090B10';
+  ctx.fillStyle = '#131314'; // var(--color-bg)
   ctx.fill();
 
   // --- LISTENER (center) ---
@@ -167,18 +167,18 @@ function drawScene(
   ctx.fill();
   ctx.shadowBlur = 0;
 
-  // Listener head silhouette (simple headphone icon suggestion)
+  // Listener head silhouette
   ctx.beginPath();
   ctx.arc(CENTER, CENTER, 4, 0, Math.PI * 2);
-  ctx.fillStyle = '#090B10';
+  ctx.fillStyle = '#131314';
   ctx.fill();
 
   // Distance label near source
-  ctx.font = `400 9px "IBM Plex Mono"`;
+  ctx.font = `600 10px "Manrope"`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = 'rgba(0,229,200,0.7)';
-  ctx.fillText(`${distance.toFixed(1)}m`, srcX, srcY - nodeRadius - 10);
+  ctx.fillStyle = 'rgba(0,220,229,0.8)';
+  ctx.fillText(`${distance.toFixed(1)}m`, srcX, srcY - nodeRadius - 12);
 
   // Scene gradient hint at corners
   const cornerGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, CANVAS_SIZE * 0.7);
