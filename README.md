@@ -1,5 +1,11 @@
 # Auris - Step Inside The Sound 🎧
 
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-black?style=for-the-badge&logo=framer&logoColor=white)
+
 Auris is a cutting-edge, immersive web application that delivers a spatial audio experience right in your browser. Built with modern web technologies, it allows users to experience 3D sound positioning, real-time room physics simulation, and binaural audio—no specialized hardware required.
 
 ## 🌟 Key Features
